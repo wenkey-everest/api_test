@@ -9,8 +9,8 @@ router.get("/api", async (req: Request, res: Response) => {
 });
 
 router.post("/api", async (req: Request, res: Response) => {
-  const { name, age } = req.body;
-  const user = User.build({ name, age });
+  const { name, age, email } = req.body;
+  const user = User.build({ name, age, email });
   await user.save();
   res.status(201).send(user);
 });

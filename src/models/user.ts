@@ -1,20 +1,24 @@
-import mongoose from "mongoose";
-
+import mongoose, { Document, model, Schema } from "mongoose";
+//Create a interface representing document in DB
 interface IUser {
   name: String;
   age: Number;
+  email: String;
 }
-
+//add build method to the IUser interface
 interface UserModelInterface extends mongoose.Model<UserDoc> {
   build(attr: IUser): UserDoc;
 }
 
-interface UserDoc extends mongoose.Document {
+//To check build is giving Exact user document or not
+interface UserDoc extends Document {
   name: String;
   age: Number;
+  email: String;
 }
 
-const userSchema = new mongoose.Schema({
+//Create a mongodb schema corresponding to the document
+const schema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -23,12 +27,16 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
 });
 
-userSchema.statics.build = (attr: IUser) => {
+schema.statics.build = (attr: IUser) => {
   return new User(attr);
 };
-
-const User = mongoose.model<any, UserModelInterface>("User", userSchema);
+// 3. Create a Model.
+const User = model<IUser, UserModelInterface>("User", schema);
 
 export { User };
